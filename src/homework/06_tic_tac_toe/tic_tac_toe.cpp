@@ -1,17 +1,21 @@
 //cpp
 #include "tic_tac_toe.h"
-#include <iostream>
-#include<algorithm>
-
-using std::cout;
 
 bool TicTacToe::game_over() {
-    return check_board_full();
+    if (check_column_win() || check_row_win() || check_diagonal_win()) {
+        set_winner();
+        return true;
+    } else if (check_board_full()) {
+        winner = "C";
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void TicTacToe::start_game(string first_player) {
     if (first_player == "X" || first_player == "O") {
-        player = (first_player);
+        player = first_player;
     } else {
         cout << "Invalid Entry. Defaulting to X\n";
         first_player = 'X';
@@ -40,6 +44,10 @@ void TicTacToe::display_board() const {
     }
 }
 
+string TicTacToe::get_winner() {
+    return winner;
+}
+
 void TicTacToe::set_next_player() {
     if (player == "X") {
         player = "O";
@@ -50,7 +58,7 @@ void TicTacToe::set_next_player() {
 
 bool TicTacToe::check_board_full() {
     bool board_full;
-    if (std::count(pegs.begin(), pegs.end(), " ")) {
+    if (count(pegs.begin(), pegs.end(), " ")) {
         board_full = false;
     } else {
         board_full = true;
@@ -61,5 +69,53 @@ bool TicTacToe::check_board_full() {
 void TicTacToe::clear_board() {
     for (auto &peg: pegs) {
         peg = " ";
+    }
+}
+
+bool TicTacToe::check_column_win() {
+    bool is_column_win;
+    if (pegs[0] == pegs[3] && pegs[3] == pegs[6] && pegs[0] != " ") {
+        is_column_win = true;
+    } else if (pegs[1] == pegs[4] && pegs[4] == pegs[7] && pegs[1] != " ") {
+        is_column_win = true;
+    } else if (pegs[2] == pegs[5] && pegs[5] == pegs[8] && pegs[2] != " ") {
+        is_column_win = true;
+    } else {
+        is_column_win = false;
+    }
+    return is_column_win;
+}
+
+bool TicTacToe::check_row_win() {
+    bool is_row_win;
+    if (pegs[0] == pegs[1] && pegs[1] == pegs[2] && pegs[0] != " ") {
+        is_row_win = true;
+    } else if (pegs[3] == pegs[4] && pegs[4] == pegs[5] && pegs[3] != " ") {
+        is_row_win = true;
+    } else if (pegs[6] == pegs[7] && pegs[7] == pegs[8] && pegs[6] != " ") {
+        is_row_win = true;
+    } else {
+        is_row_win = false;
+    }
+    return is_row_win;
+}
+
+bool TicTacToe::check_diagonal_win() {
+    bool is_diagonal_win;
+    if (pegs[0] == pegs[4] && pegs[4] == pegs[8] && pegs[0] != " ") {
+        is_diagonal_win = true;
+    } else if (pegs[2] == pegs[4] && pegs[4] == pegs[6] && pegs[2] != " ") {
+        is_diagonal_win = true;
+    } else {
+        is_diagonal_win = false;
+    }
+    return is_diagonal_win;
+}
+
+void TicTacToe::set_winner() {
+    if (player == "X") {
+        winner = "O";
+    } else {
+        winner = "X";
     }
 }
