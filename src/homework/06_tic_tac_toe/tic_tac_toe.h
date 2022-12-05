@@ -10,13 +10,19 @@ using
         std::vector,
         std::cout,
         std::cin,
-        std::count;
+        std::count,
+        std::istream,
+        std::ostream;
 
 
 #ifndef TicTacToe_H
 #define TicTacToe_H
 
 class TicTacToe {
+
+    friend ostream &operator<<(ostream &out, const TicTacToe &game);
+
+    friend istream &operator>>(istream &in, TicTacToe &game);
 
 public:
     bool game_over();
@@ -26,8 +32,6 @@ public:
     void mark_board(int position);
 
     string get_player() const;
-
-    void display_board() const;
 
     string get_winner();
 
@@ -46,9 +50,8 @@ private:
 
     void set_winner();
 
-    vector<string> pegs{" ", " ", " ",
-                        " ", " ", " ",
-                        " ", " ", " "};
+    vector<string> pegs{9, " "};
+
     string player;
 
     string winner;

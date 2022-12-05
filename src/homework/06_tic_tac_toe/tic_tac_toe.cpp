@@ -1,6 +1,26 @@
 //cpp
 #include "tic_tac_toe.h"
 
+ostream &operator<<(ostream &out, const TicTacToe &game) {
+    for (int i = 0; i < 9; i++) {
+        if (i == 0 || i == 1 || i == 3 || i == 4 || i == 6 || i == 7) { out << game.pegs[i] << "|"; }
+        if (i == 2 || i == 5 || i == 8) { out << game.pegs[i] << "\n"; }
+    }
+
+    return out;
+}
+
+istream &operator>>(istream &in, TicTacToe &game) {
+    int position;
+
+    cout << "Player " << game.get_player() << ", select a position 1-9: ";
+    in >> position;
+    cout << "\n";
+    game.mark_board(position);
+
+    return in;
+}
+
 bool TicTacToe::game_over() {
     if (check_column_win() || check_row_win() || check_diagonal_win()) {
         set_winner();
@@ -14,6 +34,7 @@ bool TicTacToe::game_over() {
 }
 
 void TicTacToe::start_game(string first_player) {
+    clear_board();
     if (first_player == "X" || first_player == "O") {
         player = first_player;
     } else {
@@ -21,7 +42,6 @@ void TicTacToe::start_game(string first_player) {
         first_player = 'X';
         player = first_player;
     }
-    clear_board();
 }
 
 void TicTacToe::mark_board(int position) {
@@ -31,17 +51,6 @@ void TicTacToe::mark_board(int position) {
 
 string TicTacToe::get_player() const {
     return player;
-}
-
-void TicTacToe::display_board() const {
-    for (int i = 0; i < 9; i++) {
-        if (i == 0 || i == 1 || i == 3 || i == 4 || i == 6 || i == 7) {
-            cout << pegs[i] << "|";
-        }
-        if (i == 2 || i == 5 || i == 8) {
-            cout << pegs[i] << "\n";
-        }
-    }
 }
 
 string TicTacToe::get_winner() {
